@@ -1,0 +1,227 @@
+query MessageDetail($messageType: MessageType!, $messageId: ID!) {
+  message(messageType: $messageType, id: $messageId) {
+    ...DetailMessageFragment
+  }
+}
+
+fragment DetailMessageFragment on MessageEssential {
+  ...EssentialFragment
+  isPrivate
+  ... on OriginalPost {
+    ...LikeableFragment
+    ...CommentableFragment
+    ...MessageInfoFragment
+    editedAt
+    topic {
+      ...TopicItemFragment
+    }
+    user {
+      ...UserCardFragment
+      following
+    }
+    related {
+      ...LikeableFragment
+      ...UserPostFragment
+      ...CommentableFragment
+      ...EssentialFragment
+      topic {
+        ...TopicItemFragment
+      }
+    }
+  }
+  ... on Repost {
+    ...LikeableFragment
+    ...CommentableFragment
+    user {
+      ...UserCardFragment
+    }
+    ...RepostFragment
+  }
+}
+
+fragment EssentialFragment on MessageEssential {
+  id
+  type
+  content
+  shareCount
+  repostCount
+  createdAt
+  collected
+  pictures {
+    format
+    watermarkPicUrl
+    picUrl
+    thumbnailUrl
+    smallPicUrl
+    width
+    height
+  }
+  urlsInText {
+    url
+    originalUrl
+    title
+  }
+}
+
+fragment LikeableFragment on LikeableMessage {
+  liked
+  likeCount
+}
+
+fragment CommentableFragment on CommentableMessage {
+  commentCount
+}
+
+fragment MessageInfoFragment on MessageInfo {
+  video {
+    title
+    type
+    image {
+      picUrl
+    }
+  }
+  linkInfo {
+    originalLinkUrl
+    linkUrl
+    title
+    pictureUrl
+    linkIcon
+    audio {
+      title
+      type
+      image {
+        thumbnailUrl
+        picUrl
+      }
+      author
+    }
+    video {
+      title
+      type
+      image {
+        picUrl
+      }
+    }
+  }
+}
+
+fragment TopicItemFragment on TopicInfo {
+  id
+  messagePrefix
+  content
+  intro
+  subscribedStatusRawValue
+  subscribersCount
+  squarePicture {
+    smallPicUrl
+    middlePicUrl
+    picUrl
+  }
+  tips {
+    inComment
+    inDraft
+  }
+  subscribersTextSuffix
+  subscribersName
+  recentPost
+}
+
+fragment UserCardFragment on UserInfo {
+  ...TinyUserFragment
+  statsCount {
+    followedCount
+    followingCount
+  }
+  backgroundImage {
+    picUrl
+  }
+  following
+}
+
+fragment TinyUserFragment on UserInfo {
+  avatarImage {
+    thumbnailUrl
+    smallPicUrl
+    picUrl
+  }
+  isSponsor
+  username
+  screenName
+  briefIntro
+}
+
+fragment UserPostFragment on MessageUserPost {
+  readTrackInfo
+  user {
+    ...TinyUserFragment
+  }
+}
+
+fragment RepostFragment on Repost {
+  target {
+    ...RepostTargetFragment
+  }
+  targetType
+}
+
+fragment RepostTargetFragment on RepostTarget {
+  ... on OriginalPost {
+    id
+    type
+    content
+    pictures {
+      thumbnailUrl
+    }
+    topic {
+      id
+      content
+    }
+    user {
+      ...TinyUserFragment
+    }
+  }
+  ... on Repost {
+    id
+    type
+    content
+    pictures {
+      thumbnailUrl
+    }
+    user {
+      ...TinyUserFragment
+    }
+  }
+  ... on Question {
+    id
+    type
+    content
+    pictures {
+      thumbnailUrl
+    }
+    user {
+      ...TinyUserFragment
+    }
+  }
+  ... on Answer {
+    id
+    type
+    content
+    pictures {
+      thumbnailUrl
+    }
+    user {
+      ...TinyUserFragment
+    }
+  }
+  ... on OfficialMessage {
+    id
+    type
+    content
+    pictures {
+      thumbnailUrl
+    }
+  }
+  ... on DeletedRepostTarget {
+    status
+  }
+} 
