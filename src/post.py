@@ -17,7 +17,7 @@ def get_post(post_url):
     }
     
     # 从 URL 中提取帖子 ID
-    post_id = post_url.split('/')[-1]
+    post_id = post_url.split('/')[-1].split('?')[0]
     print(f"正在获取帖子 ID: {post_id}")
     
     # 构建 GraphQL 请求
@@ -111,7 +111,7 @@ def get_post(post_url):
 
 if __name__ == "__main__":
     # 测试一个包含图片的帖子
-    test_url = "https://web.okjike.com/originalPost/67773e6c54198f7f16dc7d6d"
+    test_url = "https://m.okjike.com/originalPosts/6776fa892d8ef3d9a0879f67?s=ewoidSI6ICI1ODZiYzZjYTE5ZTUzYTAwMTI1NjVmYmMiCn0="
     post_info = get_post(test_url)
     
     # 打印结果
